@@ -1,4 +1,4 @@
-const isSafe = (list: number[]) => {
+const isSafe = (list: number[]): boolean => {
   let setDirection: boolean | null = null
   return list.every((x, idx) => {
     if (!idx) return true
