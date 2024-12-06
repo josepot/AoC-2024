@@ -25,8 +25,6 @@ const fns: [
   (lines: string[]) => string | Promise<string>,
 ] = (await import(`./src/${day}/solution.ts`)).default
 
-console.log("fns", fns)
-
 const fn =
   idx !== undefined ? fns[Number(idx)] : fns.filter(Boolean).slice(-1)[0]
 

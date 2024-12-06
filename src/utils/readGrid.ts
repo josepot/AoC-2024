@@ -1,5 +1,12 @@
-export function readGrid<T>(lines: string[], getCellData: (i: string) => T) {
-  return getGrid(lines.map((line) => line.split("").map(getCellData)))
+export function readGrid<T>(
+  lines: string[],
+  getCellData: (i: string, pos: { x: number; y: number }) => T,
+) {
+  return getGrid(
+    lines.map((line, y) =>
+      line.split("").map((c, x) => getCellData(c, { x, y })),
+    ),
+  )
 }
 
 export function getGrid<T>(data: T[][]) {
