@@ -68,24 +68,20 @@ const solution2 = (lines: string[]) => {
     return c
   })
 
-  const groups = new Map<number, Map<string, number>>()
-  const posToGroup = new Map<string, number>()
-
-  const createGroup = (id: number, start: Position) => {
-    const positions = new Map<string, number>()
-    groups.set(id, positions)
+  const createGroup = (start: Position) => {
+    const positions = new Set<string>()
 
     const celType = grid.getCell(start.x, start.y)
     const queue = new Queue(start)
     const inQueue = new Set([start.key])
 
+    let nAngles = 0
     while (queue.peek()) {
       const current = queue.pop()!
       toProcess.delete(current.key)
       const { key } = current
       inQueue.delete(key)
 
-      let nAngles = 0
       const top = grid.getCell(current.x, current.y - 1)
       const bottom = grid.getCell(current.x, current.y + 1)
       const left = grid.getCell(current.x - 1, current.y)
@@ -131,26 +127,16 @@ const solution2 = (lines: string[]) => {
         }
       })
 
-      posToGroup.set(key, id)
-      positions.set(key, nAngles)
+      positions.add(key)
     }
+    return positions.size * nAngles
   }
 
-  let nextGroupId = 0
+  let total = 0
   while (toProcess.size) {
-    createGroup(
-      nextGroupId++,
-      getPositionFromKey(toProcess.keys().next().value!),
-    )
+    total += createGroup(getPositionFromKey(toProcess.keys().next().value!))
   }
-
-  return [...groups.values()]
-    .map((g) => {
-      const totalAngles = [...g.values()].reduce(add, 0)
-      const size = g.size
-      return totalAngles * size
-    })
-    .reduce(add)
+  return total
 }
 
 export default [solution1, solution2]
